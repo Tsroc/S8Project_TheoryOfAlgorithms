@@ -22,6 +22,7 @@ SHA-2 (Secure Hash Algorithm 2) is a set of cryptographic hash functions designe
 
 No longer considered secure?
 
+This is not encryption, cannot be reversed, why? Does not need to be reversed
 
 #### Why can't we reverse the SHA512 algorithm to retrieve the original message from a hash digest?
 
