@@ -7,18 +7,26 @@
 #define PF PRIX64
 #define BYTE uint8_t
 
+// SHA512 works on blocks of 1024 bits.
 union Block{
-	// Set for 32, not 64
+	// 8*128=1024 - dealing with block as bytes
 	BYTE bytes[128];
+	// 64*16=1024 - dealing with block as words.
 	WORD words[16];
+	// 128*8=1024 - dealing with the last 128 bits of the last block.
+	// NOTE: Currently this is not well designed, it works but when the size is large enough it wil lfall apart as,
+	// The length is just added to sixf[14]
+	// This will need to be processed.
 	uint64_t sixf[16];
 };
 
+// For keeping track of where we are with the input message/padding.
 enum Status {
 	READ, PAD, END
 };
 
-// Get the next block
+// Returns 1 if it created a new block from original message  or padding.
+// Returns 0 if all paddied message has already been consumed.
 int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
 
 	// Number of bytes to read.
@@ -34,28 +42,29 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
 		nobytes = fread(B->bytes, 1, 128, f);
 		// Calculate the total bits read so far.
 		*nobits = *nobits + (8 * nobytes);
+		printf("%d, %d\n", nobytes, *nobits);
 
 		// Enough room for padding.
 		if(nobytes == 128){
 			return 1;
 		}
-		else if(nobytes < 119){
+		else if(nobytes < 112){
 			// Append a 1 bit ( and seven 0 bits to make the byte)
-			B->bytes[nobytes++] = 0x80;
-			while(nobytes++ < 120){
+			B->bytes[nobytes] = 0x80;
+			for(nobytes++;nobytes < 128; nobytes++){
 				B->bytes[nobytes] = 0x00;
 			}
 			// Check BIG ENDIAN
-			B->sixf[15] = *nobits;
+			B->sixf[14] = *nobits;
 			// Say this is the last block
 			*S = END;
 		}else{
-			// Gotten to the end of the input message,
-			// Not enough room in this block for all padding.
+			// Gotten to the end of the input message and not enough room
+			// in this block for all padding.
 			// // Append a 1 bit (and seven 0 bits to make a full byte.)
 			B->bytes[nobytes] = 0x80;
 			// Append 0 bits.
-			while(nobytes++ < 128){
+			for(nobytes++; nobytes < 128; nobytes++){
 				B->bytes[nobytes] = 0x00;
 			}
 			// Change the status to PAD.
@@ -68,12 +77,11 @@ int next_block(FILE *f, union Block *B, enum Status *S, uint64_t *nobits){
 		nobytes = 0;
 
 		// Append 0 bits.
-		while(nobytes++ < 120){
+		for(;nobytes < 128; nobytes++){
 			B->bytes[nobytes] = 0x00;
 		}
 		// Check BIG ENDIAN
-		// This may be incorrect, sixf may need resized.
-		B->sixf[15] = *nobits;
+		B->sixf[14] = *nobits;
 		// Change the status to PAD.
 		*S = END;
 
