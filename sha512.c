@@ -39,7 +39,6 @@ union Block{
 	// 64*16=1024 - dealing with block as words.
 	WORD words[16];
 	// 128*8=1024 - dealing with the last 128 bits of the last block.
-	// NOTE: Currently this is not well designed, it works but when the size is large enough it wil lfall apart as,
 	// The length is just added to sixf[14]
 	// This will need to be processed.
 	uint64_t sixf[16];
@@ -174,9 +173,14 @@ int next_hash(union Block *M, WORD H[]){
 
 }
 
-int sha512(FILE *f, WORD H[]){
-	// The function that performa/orchestrates the SHA52 algorithm on
+int sha512(FILE *f){
+	// The function that performs/orchestrates the SHA52 algorithm on
 	// message f.
+
+	WORD H[] = {  
+ 		0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,                 
+		0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
+	};
 
 	union Block M;
 	uint64_t nobits = 0;
@@ -186,4 +190,11 @@ int sha512(FILE *f, WORD H[]){
 	while(next_block(f, &M, &S, &nobits)){
 		next_hash(&M, H);
 	}
+
+
+	// Print the final SHA512 hash.
+	 for(int i = 0; i < 8; i++)           
+		 printf("%016" PF, H[i]);
+
+
 }

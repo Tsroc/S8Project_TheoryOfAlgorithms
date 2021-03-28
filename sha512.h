@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "main.h"
 
-int sha512(FILE *f, WORD h[]);
+int sha512(FILE *f);
 
 
 #endif /* SHA512_h */

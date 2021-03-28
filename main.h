@@ -7,7 +7,7 @@
 
 #define WORD uint64_t
 #define WLEN 64
-#define PF PRIX64
+#define PF PRIx64
 #define BYTE uint8_t
 
 // For keeping track of where we are with the input message/padding.

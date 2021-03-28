@@ -8,9 +8,6 @@ final:
 	$(CC) main.c sha512.c funcs.c -o main
 
 
-test: test.o
-	$(CC) test.c -o test
-	./test
 
 clean:
 	rm *.o main test
