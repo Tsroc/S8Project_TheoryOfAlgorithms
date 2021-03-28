@@ -196,5 +196,29 @@ int sha512(FILE *f){
 	 for(int i = 0; i < 8; i++)           
 		 printf("%016" PF, H[i]);
 
+}
+
+int sha512w(FILE *f, FILE *o){
+	// The function that performs/orchestrates the SHA52 algorithm on
+	// message f.
+
+	WORD H[] = {  
+ 		0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,                 
+		0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
+	};
+
+	union Block M;
+	uint64_t nobits = 0;
+	enum Status S = READ;
+	
+	// Loop through (preprocessed) blocks
+	while(next_block(f, &M, &S, &nobits)){
+		next_hash(&M, H);
+	}
+
+
+	// Write the final SHA512 has to file.
+	 for(int i = 0; i < 8; i++)           
+		 fprintf(o, "%016" PF, H[i]);
 
 }

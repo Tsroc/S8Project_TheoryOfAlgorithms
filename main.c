@@ -1,28 +1,79 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <getopt.h>
 
-#include "main.h"
 #include "sha512.h"
 
-int main(int argc, char *argv[]){
-	/*
-	WORD H[] = {
-		0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
-		0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
-	};
+void print_usage(){
+	printf("Usage: main -v <temp> | main -o <temp> \n");
+	exit(2);
+}
 
-	// Error check...
-
-	*/
+int shaOutput(char *argc){
 	FILE *f;
-	f = fopen(argv[1], "r");
-	// Calculate the SHA512 of f.
+	f = fopen(argc, "r");
 	sha512(f);
-	// Print the final SHA512 hash.
-	/*
-	for(int i = 0; i < 8; i++)
-	  printf("%016" PF, H[i]);
-	printf("\n");
-	*/
 	fclose(f);
 	return 0;
+}
+
+int shaWrite(char *argc){
+	FILE *f;
+	FILE *out = fopen("output.txt", "w");
+	f = fopen(argc, "r");
+	sha512w(f, out);
+	fclose(f);
+	fclose(out);
+	return 0;
+}
+
+int main (int argc, char *argv[]){
+	if(argc < 2) {
+		print_usage();
+	}
+
+	int option;
+	int vflag = 0;
+	int oflag = 0;
+
+	while((option = getopt(argc, argv, "vo:w:")) != -1){
+		switch (option){
+			case 'v':
+				if(vflag){
+					print_usage();
+				} else {
+					vflag++;
+					oflag++;
+				}
+
+				printf("Version: SHA512 1.0\n");
+				break;
+			case 'o':
+				if(oflag){
+					print_usage();
+				} else {
+					vflag++;
+					oflag++;
+				}
+				
+				printf("SHA512 hash digest for %s.\n", optarg);
+				shaOutput(optarg);
+				break;
+			case 'w':
+				if(oflag){
+					print_usage();
+				} else {
+					vflag++;
+					oflag++;
+				}
+				
+				shaWrite(optarg);
+				printf("SHA512 hash digest for %s saved to output.txt.\n", optarg);
+				break;
+			default:
+				printf("Error\n");
+		}
+
+	}
+
 }

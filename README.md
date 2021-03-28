@@ -5,16 +5,33 @@ You cannot use any external libraries.
 Your program must compile using gcc or clang
 You must include a Makefile which compiles it upon make being called in the project folder.  
 You must include tests which run upon make test being called.  
-iYou should also include in your repository an appropriate .gitignore file and a README.md.  
+You should also include in your repository an appropriate .gitignore file and a README.md.  
 
 
 
 # S8Project_TheoryOfAlgorithms
 
 ## Description of repository:
+This program, written in the C programming language, calculates the SHA512 value of an input file.
 
+__File structure__ 
+- Makefile:		Recipes for compiling the program.
+- funcs.c: 		Implements the sha512 functions described in section 4 of the secure hash standard.
+- funcs.h		Describes the funcs API.
+- main.c		Handles command line options.
+- main.h:		Global constants and definitions.
+- sha512.c		Implements the sha512 functions described in sections 5 and 6 of the secure hash standard.
+- sha512.h		Describes the sha512 API.
 
 ## Compilation instructions:
+
+__Command line inputs__ 
+The following command line inputs are accepted.
+- v: 		Prints the program version to screen.
+- o:		Prints the hash digest for the input file to console.
+- w: 		Writes the hash digest for the input file to output file. 
+
+
 
 
 ## What is SHA512, why is it important:

@@ -7,6 +7,7 @@
 #include "main.h"
 
 int sha512(FILE *f);
+int sha512w(FILE *f, FILE *o);
 
 
 #endif /* SHA512_h */
