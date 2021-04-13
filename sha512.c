@@ -196,6 +196,8 @@ int sha512(FILE *f){
 	 for(int i = 0; i < 8; i++)           
 		 printf("%016" PF, H[i]);
 
+	 printf("\n");
+
 }
 
 int sha512w(FILE *f, FILE *o){

@@ -56,7 +56,6 @@ int main (int argc, char *argv[]){
 					oflag++;
 				}
 				
-				printf("SHA512 hash digest for %s.\n", optarg);
 				shaOutput(optarg);
 				break;
 			case 'w':
@@ -68,7 +67,6 @@ int main (int argc, char *argv[]){
 				}
 				
 				shaWrite(optarg);
-				printf("SHA512 hash digest for %s saved to output.txt.\n", optarg);
 				break;
 			default:
 				printf("Error\n");
