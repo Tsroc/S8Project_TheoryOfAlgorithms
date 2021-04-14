@@ -11,14 +11,24 @@ __File structure__
 - main.h:		Global constants and definitions.
 - sha512.c		Implements the sha512 functions described in sections 5 and 6 of the secure hash standard.
 - sha512.h		Describes the sha512 API.
+- test.c		Used for Makefile test to verify the program works.
 
 ## Compilation instructions:
+
+
+The program can be run with the following command `./main -o input_file`  
 
 __Command line inputs__ 
 The following command line inputs are accepted.
 - v: 		Prints the program version to screen.
 - o:		Prints the hash digest for the input file to console.
 - w: 		Writes the hash digest for the input file to output file. 
+
+__Makefile__
+- make:			Compiles the program.
+- make clean:	Clean up, removes output and executable files.
+- make test: 	Runs tests.
+
 
 
 
@@ -102,12 +112,18 @@ And while we can expect SHA-2 to similarly breakdown with further increases in h
 
 #### How difficult is it to find a hash digest beginning with at least twelve zeros
 
-Again, this is a question on the feasibility of a preimage attack on SHA512. This task does not seem quite as troublesome as the previous task, which has enormous space and time complexity problems. Yet, like any preimage attack on a hash function, it is not computationally feasible because SHA512 is preimage resistant.   
-Seeking a hash digest which begins with at least twelve zeros is no easier than finding any other pattern as SHA512 hash digests are uniformly random.  The trouble is that there is no discernible pattern to the hash digest, each byte of the input message will alter the digest drastically. The only means to achieve this is by brute force, and the probability of finding THE desired hash digest is extremely low.
+This question describes how cryptocurrency is mined. And questions the feasibility and security of the process. A Cryptocurrency is a digital currency which has its details stored in decentralised ledgers. Cryptographic hash functions can be used as a proof of work[6]  for cryptocurrencies, when the ledger with an attached nounce is hashed and produces an output with the first x numbers being the required pattern, usually a number of leading zeros.
+This provides security to the block chain because a block will only be considered valid if it has a proof of work. 
+The details of the ledger cannot be changed without altering the hash digest, and also the hash digest of proceeding ledger is included in the subsequent ledger, creating a chain which will break if any part is altered.
+
+Seeking a hash digest which begins with at least twelve zeros is no easier than finding any other pattern as SHA512 hash digests are uniformly random.
+The trouble is that there is no discernible pattern to the hash digest, each byte of the input message will alter the digest drastically. The only means to achieve this is by brute force, and the probability of finding THE desired hash digest is extremely low.
+Because block creators are rewarded with a small amount of crypto currency, there is a competition encouraged to discover new block.
+Its worth noting that anybody can create a new block, even with fraudliant data in the ledger but because the ledger with the highest number of blocks is trusted as the correct ledger, cryptographic hash functions add to the security of the block as 
+it becomes infeasable for a person attempting to add fraudulent data to the ledger to outcompete a community generating hash digests on the correct ledger.
 
 
-What is the probability that the first bits are a number? 	(10/64)*(10/64) = 0.024  
-What is the probability that the first bits are 0? 			(1/64)*(1/64) = 0.00024
+
 
 
 
@@ -141,10 +157,16 @@ Attacks
 Message Digest
 - https://www.sciencedirect.com/topics/computer-science/message-digest
 
+Bitcoin  
+- https://www.youtube.com/watch?v=bBC-nXj3Ng4
+
+
+
 
 ### References
 [1] Message digests and digital signatures, https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.5.0/com.ibm.mq.sec.doc/q009810_.htm  
 [2] Secure Hash Standard, https://www.nist.gov/publications/secure-hash-standard-shs?pub_id=910977  
 [3] Hash Functions, https://www.sparknotes.com/cs/searching/hashtables/section2/  
-[4] Analysis of SHA-512/224 and SHA-512/256, https://eprint.iacr.org/2016/374.pdf
-[5] SHA-1 is a Shambles, https://eprint.iacr.org/2020/014.pdf
+[4] Analysis of SHA-512/224 and SHA-512/256, https://eprint.iacr.org/2016/374.pdf  
+[5] SHA-1 is a Shambles, https://eprint.iacr.org/2020/014.pdf  
+[6] Proof of work, https://www.investopedia.com/terms/p/proof-work.asp  
